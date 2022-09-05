@@ -157,9 +157,7 @@ func goPath() string {
 // CBT runs clean; build; test
 func CBT() error {
 	Clean()
-	if err := Build(); err != nil {
-		return err
-	}
+	Build()
 	if err := Test(); err != nil {
 		return err
 	}
@@ -194,11 +192,6 @@ func runCITests(extraTestArgs ...string) error {
 
 func installGoMobileIfNotPresent() error {
 	return installIfNotPresent("gomobile", "golang.org/x/mobile/cmd/gomobile@latest")
-}
-
-func Mobile() {
-	IOS()
-	Android()
 }
 
 // Generates the iOS packages
