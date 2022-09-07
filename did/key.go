@@ -8,8 +8,8 @@ import (
 )
 
 type DIDKeyWrapper struct {
-	PrivateKey *gocrypto.PrivateKey
-	DidKey	*did.DIDKey
+	PrivateKey *gocrypto.PrivateKey // TODO update PrivateKey type 
+	DidKey	string
 }
 
 // GenerateDIDKey takes in a key type value that this library supports and constructs a conformant did:key identifier.
@@ -25,7 +25,7 @@ func GenerateDidKey(kt string) (*DIDKeyWrapper, error) {
 	privateKey, didKey, err := did.GenerateDIDKey(crypto.StringToKeyType(kt))
 	return &DIDKeyWrapper{
 		PrivateKey: &privateKey,
-		DidKey: didKey,
+		DidKey: string(*didKey),
 	}, err
 }
 
