@@ -6,4 +6,4 @@ See [ssi-sdk/#181](https://github.com/TBD54566975/ssi-sdk/issues/181) for more i
 
 ## Installation
 
-You need [Android NDK](https://developer.android.com/ndk) for Android and xcodebuild for iOS
+You need [Android NDK](https://developer.android.com/ndk) for Android and `xcodebuild` for iOS
