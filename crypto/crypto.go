@@ -39,17 +39,17 @@ type CryptoKeyPair struct {
 	PubKey  []byte
 }
 
-func GenerateEd25519Key() (CryptoKeyPair, error) {
+func GenerateEd25519Key() (*CryptoKeyPair, error) {
 	privKey, pubKey, err := ssi.GenerateEd25519Key()
-	return CryptoKeyPair{
+	return &CryptoKeyPair{
 		PrivKey: privKey,
 		PubKey:  pubKey,
 	}, err
 }
 
-func GenerateX25519Key() (CryptoKeyPair, error) {
+func GenerateX25519Key() (*CryptoKeyPair, error) {
 	privKey, pubKey, err := ssi.GenerateX25519Key()
-	return CryptoKeyPair{
+	return &CryptoKeyPair{
 		PrivKey: privKey,
 		PubKey:  pubKey,
 	}, err
@@ -63,11 +63,11 @@ type ECDSAKeyPair struct {
 	PrivKeyD int64
 }
 
-func GenerateSecp256k1Key() (ECDSAKeyPair, error) {
+func GenerateSecp256k1Key() (*ECDSAKeyPair, error) {
 	pubKey, privKey, err := ssi.GenerateSecp256k1Key()
 	ecdsaPubKey := pubKey.ToECDSA()
 	ecdsaPrivKey := privKey.ToECDSA()
-	return ECDSAKeyPair{
+	return &ECDSAKeyPair{
 		PubKeyX:  ecdsaPubKey.X.Int64(),
 		PubKeyY:  ecdsaPubKey.Y.Int64(),
 		PrivKeyX: ecdsaPrivKey.X.Int64(),
@@ -76,9 +76,9 @@ func GenerateSecp256k1Key() (ECDSAKeyPair, error) {
 	}, err
 }
 
-func GenerateP224Key() (ECDSAKeyPair, error) {
+func GenerateP224Key() (*ECDSAKeyPair, error) {
 	pubKey, privKey, err := ssi.GenerateP224Key()
-	return ECDSAKeyPair{
+	return &ECDSAKeyPair{
 		PubKeyX:  pubKey.X.Int64(),
 		PubKeyY:  pubKey.Y.Int64(),
 		PrivKeyX: privKey.X.Int64(),
@@ -87,9 +87,9 @@ func GenerateP224Key() (ECDSAKeyPair, error) {
 	}, err
 }
 
-func GenerateP256Key() (ECDSAKeyPair, error) {
+func GenerateP256Key() (*ECDSAKeyPair, error) {
 	pubKey, privKey, err := ssi.GenerateP256Key()
-	return ECDSAKeyPair{
+	return &ECDSAKeyPair{
 		PubKeyX:  pubKey.X.Int64(),
 		PubKeyY:  pubKey.Y.Int64(),
 		PrivKeyX: privKey.X.Int64(),
@@ -98,9 +98,9 @@ func GenerateP256Key() (ECDSAKeyPair, error) {
 	}, err
 }
 
-func GenerateP384Key() (ECDSAKeyPair, error) {
+func GenerateP384Key() (*ECDSAKeyPair, error) {
 	pubKey, privKey, err := ssi.GenerateP384Key()
-	return ECDSAKeyPair{
+	return &ECDSAKeyPair{
 		PubKeyX:  pubKey.X.Int64(),
 		PubKeyY:  pubKey.Y.Int64(),
 		PrivKeyX: privKey.X.Int64(),
@@ -109,9 +109,9 @@ func GenerateP384Key() (ECDSAKeyPair, error) {
 	}, err
 }
 
-func GenerateP521Key() (ECDSAKeyPair, error) {
+func GenerateP521Key() (*ECDSAKeyPair, error) {
 	pubKey, privKey, err := ssi.GenerateP521Key()
-	return ECDSAKeyPair{
+	return &ECDSAKeyPair{
 		PubKeyX:  pubKey.X.Int64(),
 		PubKeyY:  pubKey.Y.Int64(),
 		PrivKeyX: privKey.X.Int64(),
@@ -127,13 +127,13 @@ type RSAKeyPair struct {
 	Primes   []int64
 }
 
-func GenerateRSA2048Key() (RSAKeyPair, error) {
+func GenerateRSA2048Key() (*RSAKeyPair, error) {
 	pubKey, privKey, err := ssi.GenerateRSA2048Key()
 	var primes []int64
 	for _, p := range privKey.Primes {
 		primes = append(primes, p.Int64())
 	}
-	return RSAKeyPair{
+	return &RSAKeyPair{
 		PubKeyE:  pubKey.E,
 		PubKeyN:  pubKey.N.Int64(),
 		PrivKeyD: privKey.D.Int64(),
