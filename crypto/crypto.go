@@ -1,11 +1,13 @@
 package crypto
 
 import (
+	"encoding/json"
+
 	ssi "github.com/TBD54566975/ssi-sdk/crypto"
 )
 
 func IsSupportedKeyType(kt string) bool {
-	supported := GetSupportedKeyTypes()
+	supported := getSupportedKeyTypes()
 	for _, t := range supported {
 		if kt == t {
 			return true
@@ -14,12 +16,17 @@ func IsSupportedKeyType(kt string) bool {
 	return false
 }
 
-func GetSupportedKeyTypes() []string {
+func getSupportedKeyTypes() []string {
 	return []string{keyTypeToString(ssi.Ed25519), keyTypeToString(ssi.X25519), keyTypeToString(ssi.Secp256k1), keyTypeToString(ssi.P224), keyTypeToString(ssi.P256), keyTypeToString(ssi.P384), keyTypeToString(ssi.P521), keyTypeToString(ssi.RSA)}
 }
 
+func GetSupportedKeyTypes() ([]byte, error) {
+	return json.Marshal(getSupportedKeyTypes())
+}
+
+
 func IsSupportedSignatureAlg(sa string) bool {
-	supported := GetSupportedSignatureAlgs()
+	supported := getSupportedSignatureAlgs()
 	for _, a := range supported {
 		if sa == a {
 			return true
@@ -28,8 +35,12 @@ func IsSupportedSignatureAlg(sa string) bool {
 	return false
 }
 
-func GetSupportedSignatureAlgs() []string {
+func getSupportedSignatureAlgs() []string {
 	return []string{signatureToString(ssi.EdDSA), signatureToString(ssi.ES256K), signatureToString(ssi.ES256), signatureToString(ssi.ES384), signatureToString(ssi.PS256)}
+}
+
+func GetSupportedSignatureAlgs() ([]byte, error) {
+	return json.Marshal(getSupportedSignatureAlgs())
 }
 
 // methods from crypto/keys.go

@@ -4,12 +4,12 @@ import (
 	gocrypto "crypto"
 
 	"github.com/TBD54566975/ssi-sdk/did"
+	"github.com/TBD54566975/ssi-sdk/util"
 	"github.com/nrobi144/ssi-sdk-mobile/crypto"
 )
-
 type DIDKeyWrapper struct {
-	PrivateKey *gocrypto.PrivateKey // TODO update PrivateKey type 
-	DidKey	string
+	PrivateKey *gocrypto.PrivateKey // TODO update PrivateKey type
+	DidKey     string
 }
 
 // GenerateDIDKey takes in a key type value that this library supports and constructs a conformant did:key identifier.
@@ -25,7 +25,7 @@ func GenerateDidKey(kt string) (*DIDKeyWrapper, error) {
 	privateKey, didKey, err := did.GenerateDIDKey(crypto.StringToKeyType(kt))
 	return &DIDKeyWrapper{
 		PrivateKey: &privateKey,
-		DidKey: string(*didKey),
+		DidKey:     string(*didKey),
 	}, err
 }
 
@@ -38,20 +38,24 @@ func CreateDIDKey(kt string, publicKey []byte) (string, error) {
 }
 
 type DecodedDIDKey struct {
-	Data []byte
+	Data    []byte
 	KeyType string
 }
+
 // Decode takes a did:key and returns the underlying public key value as bytes, the LD key type, and a possible error
 func DecodeDIDKey(d string) (*DecodedDIDKey, error) {
 	data, keyType, error := did.DIDKey(d).Decode()
 	return &DecodedDIDKey{
-		Data: data,
+		Data:    data,
 		KeyType: string(keyType),
 	}, error
 }
 
 // Expand turns the DID key into a complaint DID Document
-// TODO handle arrays inside DIDDocument
-func ExpandDIDKey(d string) (*did.DIDDocument, error) {
-	return did.DIDKey(d).Expand()
+func ExpandDIDKey(d string) ([]byte, error) {
+	didDoc, err := did.DIDKey(d).Expand()
+	if err != nil {
+		return util.PrettyJSON(didDoc)
+	}
+	return []byte{}, err
 }
