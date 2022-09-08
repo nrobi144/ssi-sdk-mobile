@@ -201,12 +201,7 @@ func IOS() {
 
 	fmt.Println("Building iOS...")
 	bindIOs := sh.RunCmd("gomobile", "bind", "-target", "ios")
-	fmt.Println("Building crypto package...")
-	bindIOs("crypto")
-	fmt.Println("Building did package...")
-	bindIOs("did")
-	fmt.Println("Building cryptosuite package...")
-	bindIOs("cryptosuite")
+	bindIOs("mobile")
 }
 
 // Generates the Android packages
@@ -217,10 +212,5 @@ func Android() {
 	apiLevel := "23"
 	fmt.Println("Building Android - Api Level: " + apiLevel + "...")
 	bindAndroid := sh.RunCmd("gomobile", "bind", "-target", "android", "-androidapi", "23")
-	fmt.Println("Building crypto package...")
-	bindAndroid("./crypto")
-	fmt.Println("Building did package...")
-	bindAndroid("./did")
-	fmt.Println("Building cryptosuite package...")
-	bindAndroid("./cryptosuite")
+	bindAndroid("./mobile")
 }

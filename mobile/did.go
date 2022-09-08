@@ -1,11 +1,10 @@
-package did
+package mobile
 
 import (
 	gocrypto "crypto"
 
 	"github.com/TBD54566975/ssi-sdk/did"
 	"github.com/TBD54566975/ssi-sdk/util"
-	"github.com/nrobi144/ssi-sdk-mobile/crypto"
 )
 type DIDKeyWrapper struct {
 	PrivateKey *gocrypto.PrivateKey // TODO update PrivateKey type
@@ -22,7 +21,7 @@ type DIDKeyWrapper struct {
 // secpPrivKey, ok := privKey.(secp.PrivateKey)
 // if !ok { ... }
 func GenerateDidKey(kt string) (*DIDKeyWrapper, error) {
-	privateKey, didKey, err := did.GenerateDIDKey(crypto.StringToKeyType(kt))
+	privateKey, didKey, err := did.GenerateDIDKey(StringToKeyType(kt))
 	return &DIDKeyWrapper{
 		PrivateKey: &privateKey,
 		DidKey:     string(*didKey),
@@ -33,7 +32,7 @@ func GenerateDidKey(kt string) (*DIDKeyWrapper, error) {
 // This method does not attempt to validate that the provided public key is of the specified key type.
 // A safer method is `GenerateDIDKey` which handles key generation based on the provided key type.
 func CreateDIDKey(kt string, publicKey []byte) (string, error) {
-	didKey, error := did.CreateDIDKey(crypto.StringToKeyType(kt), publicKey)
+	didKey, error := did.CreateDIDKey(StringToKeyType(kt), publicKey)
 	return string(*didKey), error
 }
 

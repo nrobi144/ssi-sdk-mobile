@@ -1,4 +1,4 @@
-package crypto
+package mobile
 
 import (
 	ssi "github.com/TBD54566975/ssi-sdk/crypto"
