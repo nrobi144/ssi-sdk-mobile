@@ -1,14 +1,12 @@
 package mobile
 
 import (
-	"encoding/json"
-
 	ssi "github.com/TBD54566975/ssi-sdk/crypto"
 )
 
 func IsSupportedKeyType(kt string) bool {
-	supported := getSupportedKeyTypes()
-	for _, t := range supported {
+	supported := GetSupportedKeyTypes()
+	for _, t := range supported.items {
 		if kt == t {
 			return true
 		}
@@ -16,12 +14,9 @@ func IsSupportedKeyType(kt string) bool {
 	return false
 }
 
-func getSupportedKeyTypes() []string {
-	return []string{keyTypeToString(ssi.Ed25519), keyTypeToString(ssi.X25519), keyTypeToString(ssi.Secp256k1), keyTypeToString(ssi.P224), keyTypeToString(ssi.P256), keyTypeToString(ssi.P384), keyTypeToString(ssi.P521), keyTypeToString(ssi.RSA)}
-}
-
-func GetSupportedKeyTypes() ([]byte, error) {
-	return json.Marshal(getSupportedKeyTypes())
+func GetSupportedKeyTypes() *StringArray {
+	supportedKeyTypes := []string{keyTypeToString(ssi.Ed25519), keyTypeToString(ssi.X25519), keyTypeToString(ssi.Secp256k1), keyTypeToString(ssi.P224), keyTypeToString(ssi.P256), keyTypeToString(ssi.P384), keyTypeToString(ssi.P521), keyTypeToString(ssi.RSA)}
+	return &StringArray{items: supportedKeyTypes}
 }
 
 func IsSupportedSignatureAlg(sa string) bool {
