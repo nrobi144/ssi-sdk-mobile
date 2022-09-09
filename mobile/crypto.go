@@ -25,7 +25,7 @@ func GetSupportedKeyTypes() ([]byte, error) {
 }
 
 func IsSupportedSignatureAlg(sa string) bool {
-	supported := getSupportedSignatureAlgs()
+	supported := GetSupportedSignatureAlgs()
 	for _, a := range supported.items {
 		if sa == a {
 			return true
@@ -34,13 +34,9 @@ func IsSupportedSignatureAlg(sa string) bool {
 	return false
 }
 
-func getSupportedSignatureAlgs() *StringArrayImpl {
+func GetSupportedSignatureAlgs() *StringArray {
 	signatureAlgs := []string{signatureToString(ssi.EdDSA), signatureToString(ssi.ES256K), signatureToString(ssi.ES256), signatureToString(ssi.ES384), signatureToString(ssi.PS256)}
-	return &StringArrayImpl{items: signatureAlgs}
-}
-
-func GetSupportedSignatureAlgs() ([]byte, error) {
-	return json.Marshal(getSupportedSignatureAlgs())
+	return &StringArray{items: signatureAlgs}
 }
 
 // methods from crypto/keys.go

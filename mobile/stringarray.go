@@ -1,24 +1,24 @@
 package mobile
 
-type StringArray interface {
-	Add(s string) StringArray
+type StringCollection interface {
+	Add(s string) StringCollection
 	Get(i int) string
 	Size() int
 }
 
-type StringArrayImpl struct {
+type StringArray struct {
 	items []string
 }
 
-func (stringArray StringArrayImpl) Add(s string) StringArray {
+func (stringArray StringArray) Add(s string) StringArray {
 	stringArray.items = append(stringArray.items, s)
 	return stringArray
 }
 
-func (stringArray StringArrayImpl) Get(i int) string {
+func (stringArray StringArray) Get(i int) string {
 	return stringArray.items[i]
 }
 
-func (stringArray StringArrayImpl) Size() int {
+func (stringArray StringArray) Size() int {
 	return len(stringArray.items)
 }
