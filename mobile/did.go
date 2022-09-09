@@ -3,12 +3,14 @@ package mobile
 import (
 	gocrypto "crypto"
 
+	ssi "github.com/TBD54566975/ssi-sdk/crypto"
 	"github.com/TBD54566975/ssi-sdk/did"
 	"github.com/TBD54566975/ssi-sdk/util"
 )
+
 type DIDKeyWrapper struct {
 	PrivateKey *gocrypto.PrivateKey // TODO update PrivateKey type
-	DidKey     string
+	DIDKey     string
 }
 
 // GenerateDIDKey takes in a key type value that this library supports and constructs a conformant did:key identifier.
@@ -20,11 +22,11 @@ type DIDKeyWrapper struct {
 // // where secp is an import alias to the secp256k1 library we use "github.com/decred/dcrd/dcrec/secp256k1/v4"
 // secpPrivKey, ok := privKey.(secp.PrivateKey)
 // if !ok { ... }
-func GenerateDidKey(kt string) (*DIDKeyWrapper, error) {
-	privateKey, didKey, err := did.GenerateDIDKey(StringToKeyType(kt))
+func GenerateDIDKey(kt string) (*DIDKeyWrapper, error) {
+	privateKey, didKey, err := did.GenerateDIDKey(stringToKeyType(kt))
 	return &DIDKeyWrapper{
 		PrivateKey: &privateKey,
-		DidKey:     string(*didKey),
+		DIDKey:     string(*didKey),
 	}, err
 }
 
@@ -32,8 +34,8 @@ func GenerateDidKey(kt string) (*DIDKeyWrapper, error) {
 // This method does not attempt to validate that the provided public key is of the specified key type.
 // A safer method is `GenerateDIDKey` which handles key generation based on the provided key type.
 func CreateDIDKey(kt string, publicKey []byte) (string, error) {
-	didKey, error := did.CreateDIDKey(StringToKeyType(kt), publicKey)
-	return string(*didKey), error
+	didKey, err := did.CreateDIDKey(stringToKeyType(kt), publicKey)
+	return string(*didKey), err
 }
 
 type DecodedDIDKey struct {
@@ -41,20 +43,24 @@ type DecodedDIDKey struct {
 	KeyType string
 }
 
-// Decode takes a did:key and returns the underlying public key value as bytes, the LD key type, and a possible error
+// DecodeDIDKey Decode takes a did:key and returns the underlying public key value as bytes, the LD key type, and a possible error
 func DecodeDIDKey(d string) (*DecodedDIDKey, error) {
-	data, keyType, error := did.DIDKey(d).Decode()
+	data, keyType, err := did.DIDKey(d).Decode()
 	return &DecodedDIDKey{
 		Data:    data,
 		KeyType: string(keyType),
-	}, error
+	}, err
 }
 
-// Expand turns the DID key into a complaint DID Document
+// ExpandDIDKey Expand turns the DID key into a compliant DID Document
 func ExpandDIDKey(d string) ([]byte, error) {
 	didDoc, err := did.DIDKey(d).Expand()
 	if err != nil {
 		return util.PrettyJSON(didDoc)
 	}
 	return []byte{}, err
+}
+
+func stringToKeyType(s string) ssi.KeyType {
+	return ssi.KeyType(s)
 }

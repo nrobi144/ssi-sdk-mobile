@@ -8,10 +8,6 @@ func keyTypeToString(kt ssi.KeyType) string {
 	return string(kt)
 }
 
-func StringToKeyType(s string) ssi.KeyType {
-	return ssi.KeyType(s)
-}
-
-func signatureToString(s ssi.SignatureAlgorithm)  string {
+func signatureToString(s ssi.SignatureAlgorithm) string {
 	return string(s)
 }

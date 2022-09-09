@@ -24,10 +24,9 @@ func GetSupportedKeyTypes() ([]byte, error) {
 	return json.Marshal(getSupportedKeyTypes())
 }
 
-
 func IsSupportedSignatureAlg(sa string) bool {
 	supported := getSupportedSignatureAlgs()
-	for _, a := range supported {
+	for _, a := range supported.items {
 		if sa == a {
 			return true
 		}
@@ -35,8 +34,9 @@ func IsSupportedSignatureAlg(sa string) bool {
 	return false
 }
 
-func getSupportedSignatureAlgs() []string {
-	return []string{signatureToString(ssi.EdDSA), signatureToString(ssi.ES256K), signatureToString(ssi.ES256), signatureToString(ssi.ES384), signatureToString(ssi.PS256)}
+func getSupportedSignatureAlgs() *StringArrayImpl {
+	signatureAlgs := []string{signatureToString(ssi.EdDSA), signatureToString(ssi.ES256K), signatureToString(ssi.ES256), signatureToString(ssi.ES384), signatureToString(ssi.PS256)}
+	return &StringArrayImpl{items: signatureAlgs}
 }
 
 func GetSupportedSignatureAlgs() ([]byte, error) {
