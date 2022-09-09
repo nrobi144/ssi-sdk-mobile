@@ -5,7 +5,6 @@ import (
 
 	ssi "github.com/TBD54566975/ssi-sdk/crypto"
 	"github.com/TBD54566975/ssi-sdk/did"
-	"github.com/TBD54566975/ssi-sdk/util"
 )
 
 type DIDKeyWrapper struct {
@@ -52,13 +51,34 @@ func DecodeDIDKey(d string) (*DecodedDIDKey, error) {
 	}, err
 }
 
+type DIDDocumentMobile struct {
+	Controller           string                  `json:"controller,omitempty"`
+	AlsoKnownAs          string                  `json:"alsoKnownAs,omitempty"`
+	VerificationMethod   *VerificationMethodArray    `json:"verificationMethod,omitempty" validate:"dive"`
+	Authentication       *VerificationMethodSetArray `json:"authentication,omitempty" validate:"dive"`
+	AssertionMethod      *VerificationMethodSetArray `json:"assertionMethod,omitempty" validate:"dive"`
+	KeyAgreement         *VerificationMethodSetArray `json:"keyAgreement,omitempty" validate:"dive"`
+	CapabilityInvocation *VerificationMethodSetArray `json:"capabilityInvocation,omitempty" validate:"dive"`
+	CapabilityDelegation *VerificationMethodSetArray `json:"capabilityDelegation,omitempty" validate:"dive"`
+	// TODO() Services             []Service               `json:"service,omitempty" validate:"dive"`
+}
+
 // ExpandDIDKey Expand turns the DID key into a compliant DID Document
-func ExpandDIDKey(d string) ([]byte, error) {
+func ExpandDIDKey(d string) (*DIDDocumentMobile, error) {
 	didDoc, err := did.DIDKey(d).Expand()
 	if err != nil {
-		return util.PrettyJSON(didDoc)
+		return &DIDDocumentMobile{
+			Controller: didDoc.Controller,
+			AlsoKnownAs: didDoc.AlsoKnownAs,
+			VerificationMethod: &VerificationMethodArray{items: didDoc.VerificationMethod},
+			Authentication: &VerificationMethodSetArray{items: didDoc.Authentication},
+			AssertionMethod: &VerificationMethodSetArray{items: didDoc.AssertionMethod},
+			KeyAgreement: &VerificationMethodSetArray{items: didDoc.KeyAgreement},
+			CapabilityInvocation: &VerificationMethodSetArray{items: didDoc.CapabilityInvocation},
+			CapabilityDelegation: &VerificationMethodSetArray{items: didDoc.CapabilityDelegation},
+		}, err
 	}
-	return []byte{}, err
+	return nil, err
 }
 
 func stringToKeyType(s string) ssi.KeyType {
